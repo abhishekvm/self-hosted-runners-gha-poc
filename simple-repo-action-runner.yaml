@@ -1,0 +1,10 @@
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: k8s-action-runner
+spec:
+  replicas: 2
+  template:
+    spec:
+      repository: abhishekvm/self-hosted-runners-gha-poc
+      workDir: /home/runner

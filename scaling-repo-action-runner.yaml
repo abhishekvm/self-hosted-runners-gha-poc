@@ -1,0 +1,27 @@
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: k8s-action-runner
+spec:
+  #replicas: 2
+  template:
+    spec:
+      repository: abhishekvm/self-hosted-runners-gha-poc
+      workDir: /home/runner
+---
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: HorizontalRunnerAutoscaler
+metadata:
+  name: k8s-action-runner-autoscaler
+spec:
+  scaleDownDelaySecondsAfterScaleOut: 180
+  scaleTargetRef:
+    # Your RunnerDeployment Here
+    name: k8s-action-runner
+  minReplicas: 1
+  maxReplicas: 4
+  # Your chosen scaling metrics here
+  metrics:
+  - type: TotalNumberOfQueuedAndInProgressWorkflowRuns
+    repositoryNames:
+    - abhishekvm/self-hosted-runners-gha-poc
